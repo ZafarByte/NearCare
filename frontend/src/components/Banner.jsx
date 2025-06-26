@@ -7,11 +7,11 @@ const Banner = () => {
     <div className='flex bg-[#0f172a] rounded-lg px-6 sm:px-10 md:px-14 lg:px-12 my-20 md:mx-10'>
         {/*---------------left side------------------------*/}
         <div className='flex-1 py-8 sm:py-10 md:py-16 lg:py-24 lg:pl-5'>
-            <div className='text-xl sm:text-2xl md:text-3xl lg:text-5xl font-semibold text-white'>
+            <div className='text-xl sm:text-2xl md:text-3xl lg:text-5xl font-semibold  text-[#06b6d4]'>
                 <p>Book Appointment</p>
                 <p className='mt-4'>With 100+ Trusted Doctors</p>
             </div>
-            <button onClick={()=>{navigate('/login'); scrollTo(0,0)}} className='bg-white text-sm sm:text-base text-gray-600 px-8 py-3 rounded-full mt-6 hover:scale-105 transition-all'>Create Account</button>
+            <button onClick={()=>{navigate('/login'); scrollTo(0,0)}} className='bg-[#0ea5e9] text-white text-sm sm:text-base text-gray-600 px-8 py-3 rounded-full mt-6 hover:scale-105 transition-all'>Create Account</button>
         </div>
         {/*---------------righ side------------------------*/}
         <div className='hidden md:block md:w-1/2 lg:w-[370px] relative'>
