@@ -75,6 +75,9 @@ const Appointment = () => {
     console.log(docSlots)
   },[docSlots])
 
+  if (!docInfo) return <div className="text-center py-10 text-gray-600">Loading doctor information...</div>;
+
+
   return (
     <div>
         <div className='flex flex-col sm:flex-row gap-4'>
@@ -101,10 +104,10 @@ const Appointment = () => {
         {/*Booking slots*/}
           <div className='sm:ml-72 sm:pl-4 mt-4 font-medium text-gray'>
             <p>Booking Slots</p>
-            <div>
+            <div className='flex gap-3 items-center w-full overflow-x-scroll mt-4'>
               {
                 docSlots.length && docSlots.map((item,index)=>(
-                    <div key={index}>
+                    <div  onClick={()=>setSlotIndex(index)} className={`text-center py-4 min-w-16 rounded-full cursor-pointer ${slotIndex=== index ? 'bg-[#0f172a] text-white ': 'border border-gray-200' }`} key={index}>
                         <p>{item[0] && daysOfWeek[item[0].datetime.getDay()]}</p>
                         <p>{item[0] && item[0].datetime.getDate()}</p>
                     </div>
