@@ -6,21 +6,77 @@ import { assets } from '../assets/assets'
 const Appointment = () => {
   const { docId } = useParams()
   const { doctors , currencySymbol} = useContext(AppContext)
+  const daysOfWeek =['SUN','MON','TUE','WED','THU','FRI','SAT']
   const [docInfo, setDocInfo] = useState(null)
+  const [docSlots,setDocSlots]=useState([])
+  const [slotIndex,setSlotIndex]=useState(0)
+  const [slotTime,setSlotTime]=useState('')
+
 
   const fetchDocInfo = async () => {
     const doc = doctors.find(doc => doc._id === docId)
     setDocInfo(doc)
-    console.log(doc)
+  }
+
+  const getAvailableSlot=async ()=>{
+    setDocSlots([])
+    // getting current date
+    let today=new Date()
+
+    for(let i=0;i<7;i++){
+      // getting date with Index
+      let currrentDate = new Date(today)
+      currrentDate.setDate(today.getDate()+i)
+
+      // setting end time of the date with index
+      let endTime= new Date()
+      endTime.setDate(today.getDate()+i)
+      endTime.setHours(21,0,0,0)
+
+      //setting hours
+      if(today.getDate() ===currrentDate.getDate()){
+        currrentDate.setHours(currrentDate.getHours()>10 ? currrentDate.getHours()+1 : 10)
+        currrentDate.setMinutes(currrentDate.getMinutes()>30 ? 30 : 0)
+      }
+      else{
+        currrentDate.setHours(10);
+        currrentDate.setMinutes(0)
+      }
+
+      let timeSlots =[]
+
+      while(currrentDate<endTime){
+        let formattedTime= currrentDate.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})
+
+        //add Slots
+        timeSlots.push({
+          datetime: new Date(currrentDate),
+          time:formattedTime
+        })
+
+        //Increment current time by 30 minutes
+        currrentDate.setMinutes(currrentDate.getMinutes()+30)
+        }
+
+        setDocSlots(prev=>([...prev,timeSlots]))
+    }
+    
   }
 
   useEffect(() => {
     fetchDocInfo()
   }, [doctors, docId])
 
+  useEffect(()=>{
+    getAvailableSlot()
+  },[docInfo])
+
+  useEffect(()=>{
+    console.log(docSlots)
+  },[docSlots])
+
   return (
     <div>
-      {docInfo ? (
         <div className='flex flex-col sm:flex-row gap-4'>
           <div>
             <img className='bg-[#0f172a] w-full sm:max-w-72 rounded-lg' src={docInfo.image} alt="" />
@@ -39,10 +95,23 @@ const Appointment = () => {
               Appointment fee: <span className='text-gray-600'>{currencySymbol}{docInfo.fees}</span>
             </p>
           </div>
+
+          
         </div>
-      ) : (
-        <p>Loading..</p>
-      )}
+        {/*Booking slots*/}
+          <div className='sm:ml-72 sm:pl-4 mt-4 font-medium text-gray'>
+            <p>Booking Slots</p>
+            <div>
+              {
+                docSlots.length && docSlots.map((item,index)=>(
+                    <div key={index}>
+                        <p>{item[0] && daysOfWeek[item[0].datetime.getDay()]}</p>
+                        <p>{item[0] && item[0].datetime.getDate()}</p>
+                    </div>
+                ))
+              }
+            </div>
+          </div>
     </div>
   )
 }
