@@ -9,8 +9,8 @@ const Header = () => {
             <p className='text-3xl md:text-4xl lg:text-5xl text-[#06b6d4] font-semibold leading-tight md:leading-tight lg:leading-tight text-center md:text-left w-full'>
                 Book Appointment <br /> With Trusted Doctors
             </p>
-            <div className='flex flex-col md:flex-row item-center text-center md:text-left gap-3 text-[#06b6d4] text-sm font-light'>
-                <img className='w-28' src={assets.group_profiles} alt="" />
+            <div className='flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start text-center md:text-left gap-3 text-[#06b6d4] text-sm font-light'>
+                <img className='w-28 mx-auto md:mx-0' src={assets.group_profiles} alt="" />
                 <p>simply browse through our extensive list of trusted doctors, <br className='hidden sm:block'/>  schedule your Appointment hassle-free.</p>
             </div>
             <a  href="#speciality" className='flex items-center gap-2 bg-[#0ea5e9] px-6 py-3 rounded-full text-[#f1f5f9] text-base m-auto md:m-0 hover:bg-[#0284c7] transition-all duration-300 w-full md:w-auto justify-center'>
