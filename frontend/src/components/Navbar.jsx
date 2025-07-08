@@ -7,7 +7,6 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [token, setToken] = useState(true);
   const [location, setLocation] = useState('Fetching location...');
-  const [userLocation, setUserLocation] = useState('Fetching location...');
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -49,15 +48,20 @@ const Navbar = () => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            setUserLocation(`Lat: ${latitude.toFixed(4)}, Lng: ${longitude.toFixed(4)}`);
-            // For real address, use a reverse geocoding API here
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+              .then(res => res.json())
+              .then(data => {
+                const city = data.address.city || data.address.town || data.address.village || data.address.hamlet;
+                setLocation(city ? city : data.display_name || 'Location found');
+              })
+              .catch(() => setLocation('Unable to fetch city'));
           },
           (error) => {
-            setUserLocation('Unable to fetch location');
+            setLocation('Unable to fetch location');
           }
         );
       } else {
-        setUserLocation('Geolocation not supported');
+        setLocation('Geolocation not supported');
       }
     }
   }, [showMenu]);
@@ -105,6 +109,7 @@ const Navbar = () => {
           <img src={assets.location} className="w-4 h-4" alt="Location" />
           <span>{location}</span> {/* replace with your actual location text */}
         </div>
+
         <img onClick={()=>setShowMenu(true)} className='w-6 md:hidden ' src={assets.menu_icon} alt="" />
         {/* Mobile Menu */}
         <div className={`${showMenu ? 'fixed w-full min-h-screen bg-black/30 z-30 left-0 top-0' : 'h-0 w-0'} md:hidden transition-all`}> 
@@ -121,10 +126,8 @@ const Navbar = () => {
                 <NavLink onClick={()=>setShowMenu(false)} to='/contact' className="text-lg font-semibold text-gray-700 hover:text-[#0f172a] transition-colors duration-200">Contact</NavLink>
               </ul>
               <div className="flex items-center gap-3 border px-4 py-3 rounded-lg text-gray-600 bg-white shadow mt-8">
-                <img src={assets.location} alt="Location" className="w-7 h-7" />
-                <div>
-                  <span>{location}</span>
-                </div>
+              <img src={assets.location} className="w-4 h-4" alt="Location" />
+              <span>{location}</span>
               </div>
             </div>
           </div>
