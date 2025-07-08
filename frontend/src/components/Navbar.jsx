@@ -7,6 +7,7 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [token, setToken] = useState(true);
   const [location, setLocation] = useState('Fetching location...');
+  const [userLocation, setUserLocation] = useState('Fetching location...');
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -41,6 +42,25 @@ const Navbar = () => {
       }
     );
   }, []);
+
+  useEffect(() => {
+    if (showMenu) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setUserLocation(`Lat: ${latitude.toFixed(4)}, Lng: ${longitude.toFixed(4)}`);
+            // For real address, use a reverse geocoding API here
+          },
+          (error) => {
+            setUserLocation('Unable to fetch location');
+          }
+        );
+      } else {
+        setUserLocation('Geolocation not supported');
+      }
+    }
+  }, [showMenu]);
 
   return (
     <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
@@ -85,7 +105,30 @@ const Navbar = () => {
           <img src={assets.location} className="w-4 h-4" alt="Location" />
           <span>{location}</span> {/* replace with your actual location text */}
         </div>
-
+        <img onClick={()=>setShowMenu(true)} className='w-6 md:hidden ' src={assets.menu_icon} alt="" />
+        {/* Mobile Menu */}
+        <div className={`${showMenu ? 'fixed w-full min-h-screen bg-black/30 z-30 left-0 top-0' : 'h-0 w-0'} md:hidden transition-all`}> 
+          <div className={`bg-white shadow-lg rounded-b-2xl w-full max-w-xs ml-auto min-h-screen transition-all duration-300 ${showMenu ? 'translate-x-0' : 'translate-x-full'} fixed right-0 top-0 z-40`}>
+            <div className='flex items-center justify-between px-5 py-6 border-b border-gray-100'>
+              <img src={assets.logo} alt="Logo" className="h-8 w-auto" />
+              <img src={assets.cross_icon} alt="Close" onClick={()=>setShowMenu(false)} className="h-7 w-7 cursor-pointer hover:scale-110 transition-transform duration-200" />
+            </div>
+            <div className="px-5 py-8 flex flex-col gap-8 h-full justify-between min-h-[60vh]">
+              <ul className='flex flex-col gap-6'>
+                <NavLink onClick={()=>setShowMenu(false)} to='/' className="text-lg font-semibold text-gray-700 hover:text-[#0f172a] transition-colors duration-200">Home</NavLink>
+                <NavLink onClick={()=>setShowMenu(false)} to='/doctors' className="text-lg font-semibold text-gray-700 hover:text-[#0f172a] transition-colors duration-200">All Doctors</NavLink>
+                <NavLink onClick={()=>setShowMenu(false)} to='/about' className="text-lg font-semibold text-gray-700 hover:text-[#0f172a] transition-colors duration-200">About</NavLink>
+                <NavLink onClick={()=>setShowMenu(false)} to='/contact' className="text-lg font-semibold text-gray-700 hover:text-[#0f172a] transition-colors duration-200">Contact</NavLink>
+              </ul>
+              <div className="flex items-center gap-3 border px-4 py-3 rounded-lg text-gray-600 bg-white shadow mt-8">
+                <img src={assets.location} alt="Location" className="w-7 h-7" />
+                <div>
+                  <span>{location}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
