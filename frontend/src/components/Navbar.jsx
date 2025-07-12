@@ -7,6 +7,7 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [token, setToken] = useState(true);
   const [location, setLocation] = useState('Fetching location...');
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -83,10 +84,11 @@ const Navbar = () => {
       <div className='flex items-center gap-4'>
         {
           token ? (
-            <div className='flex items-center gap-2 cursor-pointer group relative'>
+            <div className='hidden md:flex items-center gap-2 cursor-pointer group relative'>
               <img className='w-8 rounded-full' src={assets.profile_pic} alt="Profile" />
               <img className='w-2.5' src={assets.dropdown_icon} alt="Dropdown" />
-              <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block'>
+              {/* Desktop Dropdown */}
+              <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block md:block md:group-hover:block md:absolute'>
                 <div className='min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4'>
                   <p onClick={() => navigate('my-profile')} className='hover:text-black cursor-pointer'>My Profile</p>
                   <p onClick={() => navigate('my-appointments')} className='hover:text-black cursor-pointer'>My Appointment</p>
@@ -116,7 +118,7 @@ const Navbar = () => {
           <div className={`bg-white shadow-lg rounded-b-2xl w-full max-w-xs ml-auto min-h-screen transition-all duration-300 ${showMenu ? 'translate-x-0' : 'translate-x-full'} fixed right-0 top-0 z-40`}>
             <div className='flex items-center justify-between px-5 py-6 border-b border-gray-100'>
               <img src={assets.logo} alt="Logo" className="h-8 w-auto" />
-              <img src={assets.cross_icon} alt="Close" onClick={()=>setShowMenu(false)} className="h-7 w-7 cursor-pointer hover:scale-110 transition-transform duration-200" />
+              <img src={assets.cross_icon} alt="Close" onClick={()=>{setShowMenu(false); setShowProfileDropdown(false);}} className="h-7 w-7 cursor-pointer hover:scale-110 transition-transform duration-200" />
             </div>
             <div className="px-5 py-8 flex flex-col gap-8 h-full justify-between min-h-[60vh]">
               <ul className='flex flex-col gap-6'>
@@ -125,9 +127,26 @@ const Navbar = () => {
                 <NavLink onClick={()=>setShowMenu(false)} to='/about' className="text-lg font-semibold text-gray-700 hover:text-[#0f172a] transition-colors duration-200">About</NavLink>
                 <NavLink onClick={()=>setShowMenu(false)} to='/contact' className="text-lg font-semibold text-gray-700 hover:text-[#0f172a] transition-colors duration-200">Contact</NavLink>
               </ul>
+              {/* Mobile Profile Dropdown */}
+              {token && (
+                <div className="flex flex-col gap-2 mt-8">
+                  <div className="flex items-center gap-2 cursor-pointer" onClick={() => setShowProfileDropdown((prev) => !prev)}>
+                    <img className='w-8 rounded-full' src={assets.profile_pic} alt="Profile" />
+                    <span className="font-semibold text-gray-700">Account</span>
+                    <img className='w-2.5' src={assets.dropdown_icon} alt="Dropdown" />
+                  </div>
+                  {showProfileDropdown && (
+                    <div className='min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4 mt-2 shadow'>
+                      <p onClick={() => {navigate('my-profile'); setShowMenu(false); setShowProfileDropdown(false);}} className='hover:text-black cursor-pointer'>My Profile</p>
+                      <p onClick={() => {navigate('my-appointments'); setShowMenu(false); setShowProfileDropdown(false);}} className='hover:text-black cursor-pointer'>My Appointment</p>
+                      <p onClick={() => {setToken(false); setShowMenu(false); setShowProfileDropdown(false);}} className='hover:text-black cursor-pointer'>Logout</p>
+                    </div>
+                  )}
+                </div>
+              )}
               <div className="flex items-center gap-3 border px-4 py-3 rounded-lg text-gray-600 bg-white shadow mt-8">
-              <img src={assets.location} className="w-4 h-4" alt="Location" />
-              <span>{location}</span>
+                <img src={assets.location} className="w-4 h-4" alt="Location" />
+                <span>{location}</span>
               </div>
             </div>
           </div>
