@@ -8,7 +8,7 @@ const About = () => {
         <p>ABOUT <span className='text-gray-700 font-medium'>US</span></p>
       </div>
       <div className='my-6 md:my-10 flex flex-col md:flex-row gap-6 md:gap-12'>
-        <img className='w-full md:w-[360px] h-auto rounded-lg shadow-md object-cover object-center' src={assets.about_image} alt="About NearCare" />
+        <img className='w-full h-auto md:w-[400px] md:h-auto md:max-w-full rounded-lg shadow-md' src={assets.about_image} alt="About NearCare" />
         <div className='flex flex-col justify-center gap-4 md:gap-6 md:w-2/4 text-sm md:text-base text-gray-600 leading-relaxed'>
           <p>
             Welcome to NearCare – Your Neighborhood Health Companion. NearCare is your trusted partner in healthcare, bringing essential medical services closer to your home. We are committed to simplifying the way you access quality care by connecting you with verified doctors, clinics, and health professionals in your local area. Whether you need a general check-up, specialist consultation, or home-based care, NearCare makes it easy to find and book the right services with just a few clicks.
