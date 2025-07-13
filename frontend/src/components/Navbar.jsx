@@ -128,7 +128,7 @@ const Navbar = () => {
                 <NavLink onClick={()=>setShowMenu(false)} to='/contact' className="text-lg font-semibold text-gray-700 hover:text-[#0f172a] transition-colors duration-200">Contact</NavLink>
               </ul>
               {/* Mobile Profile Dropdown */}
-              {token && (
+              {token ? (
                 <div className="flex flex-col gap-2 mt-8">
                   <div className="flex items-center gap-2 cursor-pointer" onClick={() => setShowProfileDropdown((prev) => !prev)}>
                     <img className='w-8 rounded-full' src={assets.profile_pic} alt="Profile" />
@@ -142,6 +142,15 @@ const Navbar = () => {
                       <p onClick={() => {setToken(false); setShowMenu(false); setShowProfileDropdown(false);}} className='hover:text-black cursor-pointer'>Logout</p>
                     </div>
                   )}
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2 mt-8">
+                  <button
+                    onClick={() => {navigate('/login'); setShowMenu(false);}}
+                    className='bg-[#0f172a] text-white px-6 py-3 rounded-full font-bold text-center'
+                  >
+                    Create Account
+                  </button>
                 </div>
               )}
               <div className="flex items-center gap-3 border px-4 py-3 rounded-lg text-gray-600 bg-white shadow mt-8">
