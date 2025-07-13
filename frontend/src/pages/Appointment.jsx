@@ -108,11 +108,16 @@ const Appointment = () => {
             <p>Booking Slots</p>
             <div className='flex gap-3 items-center w-full overflow-x-scroll mt-4'>
               {
-                docSlots.length && docSlots.map((item,index)=>(
-                    <div  onClick={()=>setSlotIndex(index)} className={`text-center py-4 min-w-16 rounded-full cursor-pointer ${slotIndex=== index ? 'bg-[#0f172a] text-white ': 'border border-gray-200' }`} key={index}>
-                        <p>{item[0] && daysOfWeek[item[0].datetime.getDay()]}</p>
-                        <p>{item[0] && item[0].datetime.getDate()}</p>
-                    </div>
+                docSlots.length > 0 && docSlots.map((item,index)=>(
+                  <div
+                    onClick={item.length > 0 ? () => setSlotIndex(index) : undefined}
+                    className={`text-center py-4 min-w-16 rounded-full cursor-pointer select-none ${slotIndex=== index ? 'bg-[#0f172a] text-white ' : item.length === 0 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'border border-gray-200'}`}
+                    key={index}
+                  >
+                    <p>{item[0] ? daysOfWeek[item[0].datetime.getDay()] : daysOfWeek[(new Date(Date.now() + index * 24 * 60 * 60 * 1000)).getDay()]}</p>
+                    <p>{item[0] ? item[0].datetime.getDate() : (new Date(Date.now() + index * 24 * 60 * 60 * 1000)).getDate()}</p>
+                    {item.length === 0 && <span className='block text-xs mt-1'>No slots</span>}
+                  </div>
                 ))
               }
             </div>

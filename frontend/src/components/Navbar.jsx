@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { assets } from '../assets/assets';
 import { NavLink, useNavigate } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ const Navbar = () => {
   const [token, setToken] = useState(true);
   const [location, setLocation] = useState('Fetching location...');
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -67,6 +68,19 @@ const Navbar = () => {
     }
   }, [showMenu]);
 
+  useEffect(() => {
+    if (!showProfileDropdown) return;
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showProfileDropdown]);
+
   return (
     <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
       {/* Logo */}
@@ -89,7 +103,7 @@ const Navbar = () => {
               <img className='w-2.5' src={assets.dropdown_icon} alt="Dropdown" onClick={() => setShowProfileDropdown((prev) => !prev)} />
               {/* Desktop Dropdown */}
               {showProfileDropdown && (
-                <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20'>
+                <div ref={dropdownRef} className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20'>
                   <div className='min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4'>
                     <p onClick={() => {navigate('my-profile'); setShowProfileDropdown(false);}} className='hover:text-black cursor-pointer'>My Profile</p>
                     <p onClick={() => {navigate('my-appointments'); setShowProfileDropdown(false);}} className='hover:text-black cursor-pointer'>My Appointment</p>
