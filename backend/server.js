@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import connectDB from './config/mongodb.js'
 import connectCloudinary from './config/claudinary.js'
 import adminRouter from './routes/adminRoute.js'
+import bodyParser from "body-parser";
 const app = express();
 
 app.use(cors()); // allow frontend to connect backend
