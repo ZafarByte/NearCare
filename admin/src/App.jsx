@@ -3,14 +3,23 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import Login from './pages/Login'
 import './App.css'
+import { ToastContainer, toast } from 'react-toastify';
+import { AppContext } from './context/AppContext'
+import { useContext } from 'react'
+import { AdminContext } from './context/AdminContext'
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
+  const {aToken}=useContext(AdminContext)
+  
+  return  aToken ?(
    <div>
-    <Login/>
+    <ToastContainer/>
    </div>
+  ) : (
+    <>
+       <Login/>
+       <ToastContainer/>
+    </>
   )
 }
 
