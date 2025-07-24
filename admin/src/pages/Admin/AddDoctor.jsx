@@ -1,19 +1,18 @@
 import React from "react";
 import { assets } from "../../assets/assets";
 
-const AddDoctor =()=>
-{
+const AddDoctor = () => {
     return (
         <form action="">
             <p>Add Doctor</p>
             <div>
                 <div>
-                <label htmlFor="doc-img">
-                    <img src={assets.upload_area} alt="" />
+                    <label htmlFor="doc-img">
+                        <img src={assets.upload_area} alt="" />
 
-                </label>
-                <input type="file" id="doc-img" hidden/>
-                <p>Upload Doctor <br /> Picture</p>
+                    </label>
+                    <input type="file" id="doc-img" hidden />
+                    <p>Upload Doctor <br /> Picture</p>
                 </div>
 
                 <div>
@@ -51,7 +50,34 @@ const AddDoctor =()=>
                             <input type="Number" placeholder="Fee" required />
                         </div>
                     </div>
+                    <div>
+                        <div>
+                            <p>Speciality</p>
+                            <select name="" id="">
+                                <option value="General Physician">General Physician</option>
+                                <option value="Gynecologist">Gynecologist</option>
+                                <option value="Dermatologist">Dermatologist</option>
+                                <option value="Pediatricians">Pediatrician</option>
+                                <option value="Neurologist">Neurologist</option>
+                                <option value="Gastroentrologist">Gastroentrologist</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p>Education</p>
+                            <input type="text" placeholder="Education" required />
+                        </div>
+                        <div>
+                            <p>Address</p>
+                            <input type="text" placeholder="address 1" required />
+                            <input type="text" placeholder="address 2" required />
+                        </div>
+                    </div>
                 </div>
+                <div>
+                    <p>About Doctor</p>
+                    <textarea placeholder="write about doctor" rows={5} required></textarea>
+                </div>
+                <button>Add Doctor</button>
             </div>
         </form>
     )
