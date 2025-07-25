@@ -1,12 +1,13 @@
 import React from "react";
 import { assets } from "../../assets/assets";
-import { useState } from "react";
-
+import { useState ,useContext} from "react";
+import { AdminContext } from "../../context/AdminContext";
+import {toast} from 'react-toastify'
 const AddDoctor = () => {
     const [docImg,setDocImg]=useState(false)
     const [name,setName]=useState('')
     const [email,setEmail]=useState('')
-    const [password,setPasswor]=useState('')
+    const [password,setPassword]=useState('')
     const [experience,setExperience]=useState('1 Year')
     const [fees,setFees]=useState('')
     const [about,setAbout]=useState('')
@@ -14,6 +15,36 @@ const AddDoctor = () => {
     const [degree,setDegree]=useState('')
     const [address1,setAddress1]=useState('')
     const [address2,setAddress2]=useState('')
+
+    const{backendUrl,aToken}=useContext(AdminContext)
+
+    const onSubmitHandler =async (event) =>{
+        event.preventDefault()
+        try {
+            if(!docImg){
+                return toast.error("Image not selected")
+            }
+            const formData = new FormData()
+
+            formData.append('image',docImg)
+            formData.append('name',name)
+            formData.append('email',email)
+            formData.append('password',password)
+            formData.append('image',docImg)
+            formData.append('experience',experience)
+            formData.append('fee',Number(fee))
+            formData.append('speciality',speciality)
+            formData.append('degree',degree)
+            formData.append('address',JSON.stringify({line1:address1,line2:address2}))
+             
+            formData.forEach((value,key)=>{
+                console.log(`$(key) : $(value)`);
+            })
+
+        } catch (error) {
+            
+        }
+    }
 
     return (
         <form action="" className="m-5 w-full max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8 flex flex-col gap-6">
@@ -41,7 +72,7 @@ const AddDoctor = () => {
                         </div>
                         <div>
                             <p className="text-gray-700 font-medium mb-1">Doctor Password</p>
-                            <input onChange={(e)=>setPassword(e.target.value)} value={password} type="text" placeholder="Password" required className="input input-bordered w-full rounded-lg px-4 py-2 border border-gray-300 focus:border-[#0f172a] focus:outline-none transition" />
+                            <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" placeholder="Password" required className="input input-bordered w-full rounded-lg px-4 py-2 border border-gray-300 focus:border-[#0f172a] focus:outline-none transition" />
                         </div>
                         <div>
                             <p className="text-gray-700 font-medium mb-1">Experience</p>
@@ -92,6 +123,7 @@ const AddDoctor = () => {
                 <textarea onChange={(e)=>setAbout(e.target.value)} value={about} placeholder="write about doctor" rows={5} required className="input input-bordered w-full rounded-lg px-4 py-2 border border-gray-300 focus:border-[#0f172a] focus:outline-none transition resize-none"></textarea>
             </div>
             <button
+            onClick={onSubmitHandler}
                 type="submit"
                 style={{ backgroundColor: '#0f172a' }}
                 className="mt-4 text-white font-semibold py-3 rounded-lg shadow-md transition w-full hover:brightness-110"
