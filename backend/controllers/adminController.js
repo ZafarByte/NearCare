@@ -7,13 +7,16 @@ import jwt from "jsonwebtoken";
 // API to add doctor
 const addDoctor = async (req, res) => {
     try {
+        console.log("BODY:", req.body);
+        console.log("FILE:", req.file);
         const { name, email, password, speciality, experience, degree, about, fees, address, available } = req.body;
         const imageFile = req.file;
 
         // Check for all required fields
-        if (!name || !email || !password || !speciality || !experience || !degree || !about || !fees || !address || available === undefined) {
+        if (!name || !email || !password || !speciality || !experience || !degree || !about || !fees || !address) {
             return res.json({ success: false, message: "Missing details" });
         }
+        
 
         // Check if image is uploaded
         if (!imageFile) {
