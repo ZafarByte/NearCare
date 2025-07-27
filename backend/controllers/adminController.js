@@ -97,4 +97,18 @@ const adminLogin = async (req, res) => {
     }
 }
 
-export { addDoctor,adminLogin };
+
+//API to get doctor list 
+const AllDoctors = async (req,res,)=>{
+    try {
+
+        const doctors = await doctorModel.find({}).select('-password')
+        res.json({success:true,doctors})
+        
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error.message})
+    }
+}
+
+export { addDoctor,adminLogin ,AllDoctors};

@@ -83,10 +83,10 @@ const Appointment = () => {
   return (
     <div className='px-4 md:px-0'>
         <div className='flex flex-col sm:flex-row gap-4'>
-          <div>
-            <img className='bg-[#0f172a] w-full sm:max-w-72 rounded-lg' src={docInfo.image} alt="" />
+          <div className='sm:w-72 sm:flex-shrink-0'>
+            <img className='bg-[#0f172a] w-full h-full sm:h-80 object-cover rounded-lg' src={docInfo.image} alt="" />
           </div>
-          <div className='flex-1 border border-gray-400 rounded-lg p-4 md:p-8 py-4 md:py-7 bg-white mx-0 sm:mx-0 mt-[-40px] md:mt-[-80px] sm:mt-0 relative z-10'>
+          <div className='flex-1 border border-gray-400 rounded-lg p-4 md:p-8 py-4 md:py-7 bg-white mx-0 sm:mx-0 sm:mt-0 relative z-10 sm:h-80'>
             <p className='flex items-center gap-2 text-lg md:text-2xl font-medium text-gray-900'>{docInfo.name} <img  className='w-4 md:w-5' src={assets.verified_icon} alt="" /></p>
             <div className='flex items-center gap-2 text-xs md:text-sm mt-1 text-gray-600'>
               <p>{docInfo.degree} - {docInfo.speciality}</p>
