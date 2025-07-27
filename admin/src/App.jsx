@@ -24,13 +24,15 @@ function App() {
     <Navbar/>
     <div className='flex items-start'>
       <Sidebar></Sidebar>
-      <Routes>
-        <Route path='/' element={<></>}/>
-        <Route path='/admin-dashboard' element={<Dashboard/>}/>
-        <Route path='/all-appointments' element={<AllAppointment/>}/>
-        <Route path='/add-doctor' element={<AddDoctor/>}/>
-        <Route path='/doctor-list' element={<DoctorList/>}/>
-      </Routes>
+      <div className='ml-10 w-full'>
+        <Routes>
+          <Route path='/' element={<></>}/>
+          <Route path='/admin-dashboard' element={<Dashboard/>}/>
+          <Route path='/all-appointments' element={<AllAppointment/>}/>
+          <Route path='/add-doctor' element={<AddDoctor/>}/>
+          <Route path='/doctor-lists' element={<DoctorList/>}/>
+        </Routes>
+      </div>
     </div>
     </div>
    

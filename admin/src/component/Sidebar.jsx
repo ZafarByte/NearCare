@@ -9,7 +9,7 @@ import { assets } from "../assets/assets";
     const {aToken} = useContext(AdminContext)
 
     return (
-      <div className="min-h-screen bg-white border-r">
+      <div className="min-h-scree h-[1000px] bg-white border-r border-[#fffff]">
         {   
             aToken && <ul className="text-[#515151] ">
 
