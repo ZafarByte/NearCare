@@ -6,6 +6,10 @@ const TopDoctors = () => {
 
     const navigate = useNavigate()
     const {doctors} = useContext(AppContext)
+    
+    console.log('TopDoctors - doctors array:', doctors)
+    console.log('TopDoctors - doctors length:', doctors.length)
+    
     return (
         <div className='flex flex-col items-center gap-4 my-16 text-gray-900 md:mx-10'>
             <h1 className='text-3xl font-medium'>Top Doctor to Book</h1>
@@ -14,7 +18,8 @@ const TopDoctors = () => {
             </p>
 
             <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pt-5 px-3 sm:px-0 justify-items-center'>
-                {doctors.slice(0, 10).map((item, index) => (
+                {doctors && doctors.length > 0 ? (
+                    doctors.slice(0, 10).map((item, index) => (
                     <div onClick={() => navigate(`/appointment/${item._id}`)}
                         key={index}
                         className='border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-all duration-500 shadow-sm bg-white max-w-sm mx-auto w-full flex flex-row items-center sm:flex-col sm:items-stretch'
@@ -37,7 +42,12 @@ const TopDoctors = () => {
                             <p className='text-sm text-gray-600'>{item.speciality}</p>
                         </div>
                     </div>
-                ))}
+                ))
+                ) : (
+                    <div className="col-span-full text-center py-8">
+                        <p className="text-gray-500">Loading doctors...</p>
+                    </div>
+                )}
             </div>
 
             <button onClick={()=>{navigate('/doctors');  scrollTo(0,0)}} className='bg-blue-50 text-gray-600 px-12 py-3 rounded-full mt-10'>
