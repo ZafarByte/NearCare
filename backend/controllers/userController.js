@@ -4,45 +4,74 @@ import userModel from '../models/userModel.js'
 import jwt from 'jsonwebtoken'
 
 // api for registration
-
-const registerUser = async (req,res)=>{
+const registerUser = async (req, res) => {
     try {
-        const {name,email,password}=req.body
+        const { name, email, password } = req.body;
 
-        if(!name || !password || !email){
-            return res.json({success:false,message:"Missing Details"})
+        if (!name || !password || !email) {
+            return res.status(400).json({ success: false, message: "Missing Details" });
         }
 
-        if(!validator.isEmail(email)){
-            return res.json({success:false,message:"Enter a Valid email"})
-        }
-        // validating strong password
-        if(password.lenght < 8){
-            return res.json({success:false,message:"Enter a strong password"})
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({ success: false, message: "Enter a valid email" });
         }
 
-        const salt = await bcrypt.genSalt(10)
+        if (password.length < 8) {
+            return res.status(400).json({ success: false, message: "Password must be at least 8 characters" });
+        }
 
-        const hashedPassword= await bcrypt.hash(password,salt)
+        const existingUser = await userModel.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ success: false, message: "Email already registered" });
+        }
 
-        const userData = {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newUser = new userModel({
             name,
             email,
-            password:hashedPassword
-        }
-       
-        const newUser = new userModel(userData)
-        const user = await newUser.save()
+            password: hashedPassword
+        });
 
-        const token =jwt.sign({id:user._id},process.env.JWT_SECRET)
+        const user = await newUser.save();
 
-        res.json({success:true,token})
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: "1h"
+        });
 
+        res.status(201).json({ success: true, token });
 
     } catch (error) {
-        console.log(error)
-        res.json({success:false,message:error.message})
+        console.error("Register Error:", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+
+const loginUser = async(req,res)=>{
+    try {
+        const {email,password}=req.body
+        const user = await userModel.findOne({email})
+
+        if(!user){
+            res.json({success:false,message:'User does not exist'})
+        }
+
+        const isMatch= await bcrypt.compare(password,user.password)
+
+        if(isMatch){
+            const token = jwt.sign({id:user._id},process.env.JWT_SECRET)
+            res.json({success:true,token})
+        }else{
+            res.json({success:false,message:"Invalid Credential"})
+        }
+
+    } catch (error) {
+        console.error("Register Error:", error);
+        res.status(500).json({ success: false, message: error.message });
     }
 }
 
-export {registerUser}
+
+export {registerUser,loginUser}
