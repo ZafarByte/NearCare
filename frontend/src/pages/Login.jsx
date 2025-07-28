@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { AppContext } from '../context/AppContext';
 import { toast } from 'react-toastify'; // Optional: remove this line if not using toast
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const { backendUrl, token, setToken } = useContext(AppContext);
@@ -11,6 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const navigate = useNavigate()
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -30,6 +32,7 @@ const Login = () => {
           toast.success("Registered Successfully 🎉");
           localStorage.setItem('token', data.token);
           setToken(data.token);
+          navigate('/login')
         } else {
           toast.error(data.message);
         }
@@ -46,6 +49,7 @@ const Login = () => {
           toast.success("Login Success");
           localStorage.setItem('token', data.token);
           setToken(data.token);
+          navigate('/')
         } else {
           toast.error(data.message);
         }
