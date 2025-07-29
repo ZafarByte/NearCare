@@ -9,11 +9,11 @@ const addDoctor = async (req, res) => {
     try {
         console.log("BODY:", req.body);
         console.log("FILE:", req.file);
-        const { name, email, password, speciality, experience, degree, about, fees, address, available } = req.body;
+        const { name, email, password, speciality, experience, degree, about, fees, address, available,city} = req.body;
         const imageFile = req.file;
 
         // Check for all required fields
-        if (!name || !email || !password || !speciality || !experience || !degree || !about || !fees || !address) {
+        if (!name || !email || !password || !speciality || !experience || !degree || !about || !fees || !address || !city) {
             return res.json({ success: false, message: "Missing details" });
         }
         
@@ -62,6 +62,7 @@ const addDoctor = async (req, res) => {
             fees,
             available: available === "true" || available === true, // convert to boolean
             address: parsedAddress,
+            city,
             date: Date.now(),
         };
 

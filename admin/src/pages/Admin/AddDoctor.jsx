@@ -17,7 +17,7 @@ const AddDoctor = () => {
     const [degree, setDegree] = useState('')
     const [address1, setAddress1] = useState('')
     const [address2, setAddress2] = useState('')
-
+    const [city,setCity] = useState('')
     const { backendUrl, aToken } = useContext(AdminContext)
 
     const onSubmitHandler = async (event) => {
@@ -36,6 +36,7 @@ const AddDoctor = () => {
             if (!about) return toast.error("Please provide some information in 'about'");
             if (!address1) return toast.error("Please enter address line 1");
             if (!address2) return toast.error("Please enter address line 2");
+            if (!city) return toast.error("Please enter doctor City");
             if (!experience) return toast.error("Please enter the experience");
             if (!fees) return toast.error("Please enter the consultation fees");
             if (!speciality) return toast.error("Please enter the speciality");
@@ -52,6 +53,7 @@ const AddDoctor = () => {
             formData.append('about', about)
             formData.append('speciality', speciality)
             formData.append('degree', degree)
+            formData.append('city', city)
             formData.append('address', JSON.stringify({ line1: address1, line2: address2 }))
 
             formData.forEach((value, key) => {
@@ -70,6 +72,7 @@ const AddDoctor = () => {
                 setDegree('')
                 setAbout('')
                 setFees('')
+                setCity('')
             }
             else {
                 toast.error(data.message)
@@ -150,6 +153,11 @@ const AddDoctor = () => {
                             <input onChange={(e) => setAddress1(e.target.value)} value={address1} type="text" placeholder="address 1" required className="input input-bordered w-full rounded-lg px-4 py-2 border border-gray-300 focus:border-[#0f172a] focus:outline-none transition mb-2" />
                             <input onChange={(e) => setAddress2(e.target.value)} value={address2} type="text" placeholder="address 2" required className="input input-bordered w-full rounded-lg px-4 py-2 border border-gray-300 focus:border-[#0f172a] focus:outline-none transition" />
                         </div>
+                        <div>
+                            <p className="text-gray-700 font-medium mb-1">City:</p>
+                            <input onChange={(e) => setCity(e.target.value)} value={city} type="text" placeholder="City" required className="input input-bordered w-full rounded-lg px-4 py-2 border border-gray-300 focus:border-[#0f172a] focus:outline-none transition" />
+                        </div>
+                        
                     </div>
                 </div>
             </div>
