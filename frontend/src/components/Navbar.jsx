@@ -6,7 +6,8 @@ import { AppContext } from '../context/AppContext';
 const Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
-  const {token, setToken} = useContext(AppContext);
+  const {token, setToken,userData} = useContext(AppContext);
+
   const [location, setLocation] = useState('Fetching location...');
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const dropdownRef = useRef(null);
@@ -103,9 +104,9 @@ const Navbar = () => {
       {/* Right Side: Auth + Location */}
       <div className='flex items-center gap-4'>
         {
-          token ? (
+          token && userData? (
             <div className='hidden md:flex items-center gap-2 cursor-pointer relative'>
-              <img className='w-8 rounded-full' src={assets.profile_pic} alt="Profile" />
+              <img className='w-8 h-8 rounded-full object-cover border-2 border-gray-200' src={userData.image} alt="Profile" />
               <img className='w-2.5' src={assets.dropdown_icon} alt="Dropdown" onClick={() => setShowProfileDropdown((prev) => !prev)} />
               {/* Desktop Dropdown */}
               {showProfileDropdown && (
