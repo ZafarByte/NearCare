@@ -135,6 +135,42 @@ const getProfile = async (req, res) => {
         return res.json({ success: false, message: "Doctor not Available" });
       }
 
+      let slots_Booked= docData.slots_Booked 
+      //checking for availability
+      if (slots_Booked[slotDate]){
+        if(slots_Booked[slotDate].includes(slotTime)){
+          return res.json({ success: false, message: "Slot not Available" });
+        }
+        else{
+          slots_Booked[slotDate].push(slotTime);
+        }
+      }
+      else{
+        slots_Booked[slotDate]=[]
+        slots_Booked[slotDate].push(slotTime);
+      }
+
+      const userData = await userModel.findById(userId).select("-password");
+      delete docData.slots_Booked
+
+      const appointmentData = {
+        userId,
+        docId,
+        userData,
+        docData,
+        amount: docData.fees,
+        slotDate,
+        slotTime,
+        date: Date.now(),
+      };
+
+      const newAppointment = new appointmentModel(appointmentData);
+      await newAppointment.save();
+
+      //save new slots data in docData
+      await doctorModel.findByIdAndUpdate(docId, { slots_Booked });
+
+      res.json({ success: true, message: "Appointment Booked" });
       
     } catch (error) {
       console.log(error);
@@ -145,4 +181,4 @@ const getProfile = async (req, res) => {
 
 
 
-export {registerUser,loginUser ,getProfile,updateProfile}
+export {registerUser,loginUser ,getProfile,updateProfile,bookAppointment}
