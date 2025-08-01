@@ -4,6 +4,7 @@ import userModel from '../models/userModel.js'
 import jwt from 'jsonwebtoken'
 import { v2 as cloudinary } from 'cloudinary'
 import doctorModel from '../models/doctorModel.js'
+import appointmentModel from '../models/appointmentModel.js'
 
 // api for registration
 const registerUser = async (req, res) => {
@@ -127,12 +128,15 @@ const getProfile = async (req, res) => {
 
 
   const bookAppointment =async(req,res)=>{
+    
     try {
-      const {userId, docId ,slotDate,slotTime}=req.body
-
+      const { docId, slotDate, slotTime } = req.body;
+      const userId = req.user.id; // pulled from JWT, safer
+      
       const docData = await doctorModel.findById(docId).select("-password");
+
       if (!docData.available) {
-        return res.json({ success: false, message: "Doctor not Available" });
+        return res.json({success: false, message: "Doctor not Available" });
       }
 
       let slots_Booked= docData.slots_Booked 
@@ -150,19 +154,12 @@ const getProfile = async (req, res) => {
         slots_Booked[slotDate].push(slotTime);
       }
 
-      const userData = await userModel.findById(userId).select("-password");
+      const userData = await userModel.findById(userId).select('-password');
       delete docData.slots_Booked
 
       const appointmentData = {
-        userId,
-        docId,
-        userData,
-        docData,
-        amount: docData.fees,
-        slotDate,
-        slotTime,
-        date: Date.now(),
-      };
+        userId,docId,userData,docData,amount:docData.fees,slotTime,slotDate,date:Date.now()
+      }
 
       const newAppointment = new appointmentModel(appointmentData);
       await newAppointment.save();
