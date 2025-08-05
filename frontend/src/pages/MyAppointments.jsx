@@ -36,6 +36,22 @@ const MyAppointments = () => {
     }
   };
 
+  const cancelAppointment = async(appointmentId)=>{
+    try {
+     const {data} = axios.post(backendUrl+'/api/user/cancel-appointments',{appointmentId},{headers: {token}})
+     if(data.success){
+      toast.success(data.message)
+      getUserAppointments()
+     }else{
+      toast.error(data.message)
+     }
+      
+    } catch (error) {
+       console.error("Error fetching appointments:", error);
+      toast.error("Error fetching appointments");
+    }
+  }
+
   useEffect(() => {
     if (token) getUserAppointments();
   }, [token]);
@@ -70,7 +86,7 @@ const MyAppointments = () => {
               <button className="bg-transparent border border-[#0f172a] text-[#0f172a] px-6 py-2 rounded-full font-medium transition-all duration-300 hover:bg-[#0f172a] hover:text-white">
                 Pay Online
               </button>
-              <button className="bg-transparent border border-red-500 text-red-500 px-6 py-2 rounded-full font-medium transition-all duration-300 hover:bg-red-500 hover:text-white">
+              <button onClick={()=>cancelAppointment(item._id)} className="bg-transparent border border-red-500 text-red-500 px-6 py-2 rounded-full font-medium transition-all duration-300 hover:bg-red-500 hover:text-white">
                 Cancel
               </button>
             </div>
