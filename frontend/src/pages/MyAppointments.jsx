@@ -38,7 +38,7 @@ const MyAppointments = () => {
 
   const cancelAppointment = async(appointmentId)=>{
     try {
-     const {data} = axios.post(backendUrl+'/api/user/cancel-appointments',{appointmentId},{headers: {token}})
+     const {data} =await axios.post(backendUrl+'/api/user/cancel-appointments',{appointmentId},{headers: {token}})
      if(data.success){
       toast.success(data.message)
       getUserAppointments()
