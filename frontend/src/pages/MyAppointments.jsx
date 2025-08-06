@@ -83,12 +83,17 @@ const MyAppointments = () => {
               </p>
             </div>
             <div className="flex flex-col gap-4 justify-center md:justify-end items-stretch md:items-end w-full md:w-auto mt-4 md:mt-0">
+               {!item.cancelled && 
               <button className="bg-transparent border border-[#0f172a] text-[#0f172a] px-6 py-2 rounded-full font-medium transition-all duration-300 hover:bg-[#0f172a] hover:text-white">
                 Pay Online
-              </button>
-              <button onClick={()=>cancelAppointment(item._id)} className="bg-transparent border border-red-500 text-red-500 px-6 py-2 rounded-full font-medium transition-all duration-300 hover:bg-red-500 hover:text-white">
+              </button>}
+              {!item.cancelled &&  <button onClick={()=>cancelAppointment(item._id)} className="bg-transparent border border-red-500 text-red-500 px-6 py-2 rounded-full font-medium transition-all duration-300 hover:bg-red-500 hover:text-white">
                 Cancel
-              </button>
+              </button> }
+              {item.cancelled && <button className="bg-red-100 text-red-500 px-6 py-2 rounded-full font-medium">
+                Cancelled
+              </button>}
+             
             </div>
           </div>
         ))}
