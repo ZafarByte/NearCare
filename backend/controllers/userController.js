@@ -6,6 +6,19 @@ import { v2 as cloudinary } from 'cloudinary'
 import doctorModel from '../models/doctorModel.js'
 import appointmentModel from '../models/appointmentModel.js'
 import razorpay from 'razorpay'
+import nodemailer from 'nodemailer';
+import otpStore from '../otpStore.js'
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const htmlTemplatePath = path.join(__dirname, '..', 'templates', 'otpEmail.html');
+const htmlContent = fs.readFileSync(htmlTemplatePath, 'utf-8');
 
 // api for registration
 const registerUser = async (req, res) => {
@@ -249,21 +262,58 @@ const paymentRazorpay = async (req, res) => {
 }
 
 //api to verifypayment 
-const verifyRazorpay = async (req,res)=>{
+const verifyRazorpay = async (req, res) => {
   try {
-    const {razorpay_order_id} =req.body
+    const { razorpay_order_id } = req.body
     const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id)
-    if(orderInfo.status == 'paid'){
-      await appointmentModel.findByIdAndUpdate(orderInfo.receipt,{Payment:true})
-      res.json({success:true,message:"Payment Successful"})
+    if (orderInfo.status == 'paid') {
+      await appointmentModel.findByIdAndUpdate(orderInfo.receipt, { Payment: true })
+      res.json({ success: true, message: "Payment Successful" })
     }
-    else{
-      res.json({success:false,message:"Payment Failed"})
+    else {
+      res.json({ success: false, message: "Payment Failed" })
     }
   } catch (error) {
     console.log(error);
-    res.json({success:false,message:error.message})
+    res.json({ success: false, message: error.message })
   }
 }
 
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppointment ,paymentRazorpay,verifyRazorpay}
+
+const sendOtp = async (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ success: false, message: 'All fields are required' });
+  }
+
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = Date.now() + 5 * 60 * 1000; // 5 mins
+
+  otpStore.set(email, { otp, expiresAt, name, password });
+
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: process.env.GMAIL_USER,
+      to: email,
+      subject: 'Your OTP for Registration',
+      html: htmlContent.replace('{{OTP}}', otp), // if your HTML has {{OTP}} placeholder
+    });
+
+    res.json({ success: true, message: 'OTP sent successfully' });
+  } catch (err) {
+    console.error('Email error:', err.message);
+    res.status(500).json({ success: false, message: 'Failed to send OTP' });
+  }
+}
+
+
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppointment, paymentRazorpay, verifyRazorpay, sendOtp }
