@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import {assets} from '../assets/assets'
 import {useState} from 'react'
 import { AdminContext } from '../context/AdminContext'
+import { DoctorContext } from '../context/DoctorContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
@@ -10,7 +11,7 @@ const Login = () => {
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
   const {setAToken,backendUrl}=useContext(AdminContext)
-
+  const {setDToken}=useContext(DoctorContext)
   const onSubmitHandler=async(event)=>{
     event.preventDefault()
     try {
@@ -25,7 +26,15 @@ const Login = () => {
             toast.error(data.message)
          }
        }else{
-
+           const {data} =await axios.post(`${backendUrl}/api/doctor/login`,{email,password})
+           if(data.success){
+            toast.success(data.message)
+            localStorage.setItem('dToken',data.token)
+            setDToken(data.token)
+         }
+         else{
+            toast.error(data.message)
+         }
        }
     } catch (error) {
       
@@ -41,11 +50,11 @@ const Login = () => {
             <p className='text-2xl font-semibold m-auto '><span className='text-[#0f172a]'>{state}</span> Login</p>
             <div className='w-full'>
                 <p>Email</p>
-                <input onChange={(e)=>setEmail(e.target.value)} value={email} className='border border-[#dadada] rounded w-full p-2 mt-1 ' type="email" required />
+                <input onChange={(e)=>setEmail(e.target.value)} value={email} className='border border-[#dadada] rounded w-full p-2 mt-1' type="email" required />
             </div>
             <div className='w-full'>
                 <p>Password</p>
-                <input onChange={(e)=>setPassword(e.target.value)} value={password} className='border border-[#dadada] rounded w-full p-2 mt-1 ' type="password" required />
+                <input onChange={(e)=>setPassword(e.target.value)} value={password} className='border border-[#dadada] rounded w-full p-2 mt-1' type="password" required />
             </div>
             <button className='bg-[#0f172a] text-white w-full py-2 rounded-md text-base'>Login</button>
             {
