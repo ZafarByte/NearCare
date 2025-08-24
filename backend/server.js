@@ -21,7 +21,6 @@ app.use('/api/user',userRouter)
 
 // Add debugging middleware
 app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url}`);
     next();
 });
 
@@ -37,5 +36,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-})
+    console.log(`Server running on port ${PORT}`);
+});
