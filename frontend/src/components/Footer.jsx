@@ -9,7 +9,7 @@ const Footer = () => {
             <div>
                 <img className='mb-5 w-40' src={assets.logo} alt="" />
                <p className='w-full md:w-2/3 text-gray-600 leading-6'>
-NearCare is a modern doctor appointment booking platform designed to simplify healthcare access. It allows patients to easily find doctors, schedule appointments, and make secure online payments, eliminating long queues and reducing administrative hassles. With a focus on convenience and efficiency, NearCare ensures timely medical care while keeping patient records organized and accessible.
+NearCare is a modern doctor appointment booking platform designed to simplify healthcare access.
 </p>
 
             </div>
