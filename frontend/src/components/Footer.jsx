@@ -34,7 +34,7 @@ NearCare is a modern doctor appointment booking platform designed to simplify he
         </div>
         <div>
             <hr />
-            <p className='py-5 text-sm text-center'>Designed and Developed with ❤️ By Mohammad Zafar Gayas</p>
+            <p className='py-5 text-sm text-center'>Designed and Developed with ❤️ By Zafar </p>
         </div>
     </div>
   )
