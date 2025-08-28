@@ -32,7 +32,7 @@ const Login = () => {
           toast.success("Registered Successfully 🎉");
           localStorage.setItem('token', data.token);
           setToken(data.token);
-          navigate('/login')
+          setState('Login');
         } else {
           toast.error(data.message);
         }
