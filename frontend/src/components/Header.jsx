@@ -1,16 +1,30 @@
 import React from "react";
 import { assets } from "../assets/assets";
+import { Typewriter } from "react-simple-typewriter";
 
 const Header = () => {
     return (
         <header className="bg-[#0f172a] rounded-2xl px-6 md:px-12 lg:px-20 py-10 md:py-16 w-full my-6 flex flex-col-reverse md:flex-row items-center md:items-center gap-10 shadow-lg">
             {/* Left Section */}
             <div className="flex-1 flex flex-col justify-center gap-6 text-center md:text-left">
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#06b6d4] leading-tight tracking-tight">
-                    Connect with <br className="hidden md:block" />
-                    <span className="text-[#f1f5f9]">Trusted Doctors Near You</span>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight">
+                    <span className="text-[#06b6d4]">Connect with{" "}</span>
+                    <span className="text-[#f1f5f9]">
+                        <Typewriter
+                            words={[
+                                "Trusted Doctors Near You",
+                                "Top Specialists Around You",
+                                "Experienced Medical Experts",
+                            ]}
+                            loop={true}
+                            cursor
+                            cursorStyle="|"
+                            typeSpeed={70}
+                            deleteSpeed={50}
+                            delaySpeed={1500}
+                        />
+                    </span>
                 </h1>
-
 
                 <p className="text-[#f1f5f9]/80 text-base sm:text-lg font-light max-w-lg mx-auto md:mx-0">
                     Discover top specialists and schedule your appointment in just a few clicks.
